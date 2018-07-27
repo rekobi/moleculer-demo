@@ -1,0 +1,27 @@
+{
+  "name": "mole",
+  "version": "1.0.0",
+  "description": "moleculer demo",
+  "main": "starter.js",
+  "scripts": {
+    "mole": "node starter.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rekobi/moleculer-demo.git"
+  },
+  "author": "rekko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rekobi/moleculer-demo/issues"
+  },
+  "homepage": "https://github.com/rekobi/moleculer-demo#readme",
+  "dependencies": {
+    "koa": "^2.5.2",
+    "koa-router": "^7.4.0",
+    "moleculer": "^0.13.1",
+    "moleculer-repl": "^0.5.1",
+    "nats": "^1.0.1"
+  }
+}
