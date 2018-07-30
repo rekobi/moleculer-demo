@@ -19,6 +19,7 @@
   "homepage": "https://github.com/rekobi/moleculer-demo#readme",
   "dependencies": {
     "koa": "^2.5.2",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "moleculer": "^0.13.1",
     "moleculer-repl": "^0.5.1",

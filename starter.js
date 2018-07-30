@@ -1,16 +1,11 @@
 const { ServiceBroker } = require("moleculer");
 const Koa = require("koa");
 const brokerSetting = require("./settings/brokerSetting.js");
+const app = new Koa();
 const broker = new ServiceBroker(brokerSetting);
-
-
-
+const routes_inject = require("./routers/test.js");
 //broker.repl();
 
-let started = broker.start();
-    // Call service
-    started.then(() => broker.call("greeter.hello2", {} ,{nodeID: "foxtrot-28814"}))
-    .then(res => console.log(res))
-    .then(()=>broker.stop())
-    .then(()=>console.log("session closed!!!!"))
-    .catch(err => console.error(`Error occured! ${err.message}`));
+let main = broker.start();
+routes_inject(app,main,broker);
+app.listen(8011);
