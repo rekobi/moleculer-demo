@@ -4,7 +4,7 @@ const brokerSetting = require("./settings/brokerSetting.js");
 const app = new Koa();
 const broker = new ServiceBroker(brokerSetting);
 const routes_inject = require("./routers/test.js");
-//broker.repl();
+broker.repl();
 
 let main = broker.start();
 routes_inject(app,main,broker);

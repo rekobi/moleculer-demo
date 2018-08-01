@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/rekobi/moleculer-demo#readme",
   "dependencies": {
+    "amqplib": "^0.5.2",
+    "eslint": "^5.2.0",
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
