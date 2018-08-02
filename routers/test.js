@@ -1,5 +1,6 @@
 const router = require("koa-router")();
 const koaJson2xlsx = require('koa-json2xlsx');
+const bodyParser = require('koa-bodyparser');
 module.exports =function(app,main,broker){
   router
   .get('/test',async function(ctx){
@@ -22,16 +23,16 @@ module.exports =function(app,main,broker){
     await main.then(()=>broker.emit("order.create",{rua:"伟天魔术棒"}))
     .catch(err => console.error(`Error occured! ${err.message}`));
 
-  });
+  })
 
-  // .post('/uploadxls',async function(ctx){
-  //   let filePath = await ctx.formParse();
-  //   let data = ctx.xlsToJson(filePath);
-  //   ctx.body = data;
-  // });
+  .post('/posttest',async function(ctx){
+    console.log(ctx.request.body.rua);
+    ctx.body = "rua";
+  });
 
   app
   .use(koaJson2xlsx())
+  .use(bodyParser())
   .use(router.routes())
   .use(router.allowedMethods());
 
