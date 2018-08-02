@@ -1,7 +1,22 @@
 const router = require("koa-router")();
 const koaJson2xlsx = require('koa-json2xlsx');
-const bodyParser = require('koa-bodyparser');
+const multer = require('koa-multer');
+// const bodyParser = require('koa-bodyparser');
+//const fs = require("fs");
 module.exports =function(app,main,broker){
+  var storage = multer.diskStorage({
+    //文件保存路径
+    destination: function (req, file, cb) {
+      cb(null, 'upload/');
+    },
+    // //修改文件名称
+    // filename: function (req, file, cb) {
+    //   var fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
+    //   cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    // }
+  });
+
+  let upload = multer({storage});
   router
   .get('/test',async function(ctx){
     await main.then(()=>broker.call("v3.test.rua"))
@@ -25,14 +40,16 @@ module.exports =function(app,main,broker){
 
   })
 
-  .post('/posttest',async function(ctx){
-    console.log(ctx.request.body.rua);
-    ctx.body = "rua";
+  .post('/upload',upload.single('file'),async function(ctx){
+    console.log(ctx.req.file);
+    ctx.body = {
+      filename: ctx.req.file.filename//返回文件名
+    }; 
   });
-
+  
   app
   .use(koaJson2xlsx())
-  .use(bodyParser())
+  // .use(bodyParser())
   .use(router.routes())
   .use(router.allowedMethods());
 

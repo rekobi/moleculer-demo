@@ -23,6 +23,7 @@
     "koa": "^2.5.2",
     "koa-bodyparser": "^4.2.1",
     "koa-json2xlsx": "^1.0.2",
+    "koa-multer": "^1.0.2",
     "koa-router": "^7.4.0",
     "moleculer": "^0.13.1",
     "moleculer-repl": "^0.5.1"
