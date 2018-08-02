@@ -1,11 +1,10 @@
 const router = require("koa-router")();
-
-
+const koaJson2xlsx = require('koa-json2xlsx');
 module.exports =function(app,main,broker){
   router
   .get('/test',async function(ctx){
-    await main.then(()=>broker.call("v3.test.rua", {num: 1}))
-    .then((res)=>ctx.body = res)
+    await main.then(()=>broker.call("v3.test.rua"))
+    .then((res)=>ctx.xlsx('data1.xlsx', res))
     .catch(err => console.error(`Error occured! ${err.message}`));
   })                                                                                                                                                                                                                                                                                          
   .get('/test/norua',async function(ctx){
@@ -25,7 +24,14 @@ module.exports =function(app,main,broker){
 
   });
 
+  // .post('/uploadxls',async function(ctx){
+  //   let filePath = await ctx.formParse();
+  //   let data = ctx.xlsToJson(filePath);
+  //   ctx.body = data;
+  // });
+
   app
+  .use(koaJson2xlsx())
   .use(router.routes())
   .use(router.allowedMethods());
 
