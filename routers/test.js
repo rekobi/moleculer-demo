@@ -9,11 +9,11 @@ module.exports =function(app,main,broker){
     destination: function (req, file, cb) {
       cb(null, 'upload/');
     },
-    // //修改文件名称
-    // filename: function (req, file, cb) {
-    //   var fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
-    //   cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
-    // }
+    //修改文件名称
+    filename: function (req, file, cb) {
+      var fileFormat = (file.originalname).split(".");  //以点分割成数组，数组的最后一项就是后缀名
+      cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    }
   });
 
   let upload = multer({storage});
@@ -42,9 +42,22 @@ module.exports =function(app,main,broker){
 
   .post('/upload',upload.single('file'),async function(ctx){
     console.log(ctx.req.file);
-    ctx.body = {
-      filename: ctx.req.file.filename//返回文件名
-    }; 
+    await main.then(()=>broker.call("v3.test.son",{filepath: ctx.req.file.path}))
+    .then((res)=>ctx.body=res)
+    .catch(err => console.error(`Error occured! ${err.message}`));
+    // ctx.body = {
+    //   filename: ctx.req.file.filename//返回文件名
+    // }; 
+  })
+
+  .post('/json',upload.single('file'),async function(ctx){
+    console.log(ctx.req.file);
+    await main.then(()=>broker.call("v3.excel.json",{filepath: ctx.req.file.path}))
+    .then((res)=>ctx.body=res)
+    .catch(err => console.error(`Error occured! ${err.message}`));
+    // ctx.body = {
+    //   filename: ctx.req.file.filename//返回文件名
+    // }; 
   });
   
   app
