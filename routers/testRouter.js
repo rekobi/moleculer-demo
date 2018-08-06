@@ -1,8 +1,6 @@
+"use strict";
 const router = require("koa-router")();
-const koaJson2xlsx = require('koa-json2xlsx');
 const multer = require('koa-multer');
-// const bodyParser = require('koa-bodyparser');
-//const fs = require("fs");
 module.exports =function(app,main,broker){
   var storage = multer.diskStorage({
     //文件保存路径
@@ -18,9 +16,18 @@ module.exports =function(app,main,broker){
 
   let upload = multer({storage});
   router
+  .get('/test/mixins',async function(ctx){
+    await main.then(()=> broker.call("v3.ZouwbTest.mT",{useMongo : true}))
+    .then((res)=> {
+      console.log(res);
+      return ctx.body = res;
+    })
+    .catch(err => console.error(`Error occured! ${err.message}`));
+
+  })
   .get('/test',async function(ctx){
     await main.then(()=>broker.call("v3.test.rua"))
-    .then((res)=>ctx.xlsx('data1.xlsx', res))
+    .then((res) => ctx.xlsx('data1.xlsx', res))
     .catch(err => console.error(`Error occured! ${err.message}`));
   })                                                                                                                                                                                                                                                                                          
   .get('/test/norua',async function(ctx){
@@ -51,9 +58,11 @@ module.exports =function(app,main,broker){
   })
 
   .post('/json',upload.single('file'),async function(ctx){
-    console.log(ctx.req.file);
-    await main.then(()=>broker.call("v3.excel.json",{filepath: ctx.req.file.path}))
-    .then((res)=>ctx.body=res)
+    await main.then( () => broker.call("v3.xls.parseToJson",{filepath: "/home/zouwb/takeback/moleculer-demo/"+ctx.req.file.path}))
+    .then((res)=> {
+      console.log(res);
+      return ctx.body = res;
+    })
     .catch(err => console.error(`Error occured! ${err.message}`));
     // ctx.body = {
     //   filename: ctx.req.file.filename//返回文件名
@@ -61,8 +70,6 @@ module.exports =function(app,main,broker){
   });
   
   app
-  .use(koaJson2xlsx())
-  // .use(bodyParser())
   .use(router.routes())
   .use(router.allowedMethods());
 
