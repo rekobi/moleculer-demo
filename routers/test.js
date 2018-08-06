@@ -1,6 +1,7 @@
 const router = require("koa-router")();
 const koaJson2xlsx = require('koa-json2xlsx');
 const multer = require('koa-multer');
+const path = require('path');
 // const bodyParser = require('koa-bodyparser');
 //const fs = require("fs");
 module.exports =function(app,main,broker){
@@ -51,8 +52,7 @@ module.exports =function(app,main,broker){
   })
 
   .post('/json',upload.single('file'),async function(ctx){
-    console.log(ctx.req.file);
-    await main.then(()=>broker.call("v3.excel.json",{filepath: ctx.req.file.path}))
+    await main.then(()=>broker.call("v3.excel.json",{filepath: path.dirname(__dirname)+'/'+ ctx.req.file.path}))
     .then((res)=>ctx.body=res)
     .catch(err => console.error(`Error occured! ${err.message}`));
     // ctx.body = {
